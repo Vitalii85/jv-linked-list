@@ -21,6 +21,10 @@ public class MyLinkedList<T> implements MyLinkedListInterface<T> {
 
     @Override
     public void add(T value, int index) {
+        if (index < 0 || index > size) {
+            throw new IndexOutOfBoundsException("Index passed is invalid, index: "
+                    + index + ", list size: " + size);
+        }
         if (index == size) {
             add(value);
             return;
@@ -86,15 +90,11 @@ public class MyLinkedList<T> implements MyLinkedListInterface<T> {
         return size == 0;
     }
 
-    private void checkIndex(int index) {
+    private Node<T> getNode(int index) {
         if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException("Index passed is invalid, index: "
                     + index + ", list size: " + size);
         }
-    }
-
-    private Node<T> getNode(int index) {
-        checkIndex(index);
         Node<T> node;
         if (index < size / 2) {
             node = first;

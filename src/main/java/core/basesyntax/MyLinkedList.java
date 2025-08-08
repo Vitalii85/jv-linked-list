@@ -1,7 +1,6 @@
 package core.basesyntax;
 
 import java.util.List;
-import java.util.Objects;
 
 public class MyLinkedList<T> implements MyLinkedListInterface<T> {
     private Node<T> first;
@@ -11,13 +10,12 @@ public class MyLinkedList<T> implements MyLinkedListInterface<T> {
     @Override
     public void add(T value) {
         if (isEmpty()) {
-            first = new Node<>(null, value, null);
-            last = first;
-            size++;
-            return;
+            last = new Node<>(null, value, null);
+            first = last;
+        } else {
+            last.next = new Node<>(last, value, null);
+            last = last.next;
         }
-        last.next = new Node<>(last, value, null);
-        last = last.next;
         size++;
     }
 
@@ -31,10 +29,10 @@ public class MyLinkedList<T> implements MyLinkedListInterface<T> {
         node.prev = new Node<>(node.prev, value, node);
         if (node == first) {
             first = node.prev;
-            size++;
-            return;
+        } else {
+            Node<T> prevNode = node.prev.prev;
+            prevNode.next = node.prev;
         }
-        node.prev.prev.next = node.prev;
         size++;
     }
 
@@ -68,7 +66,8 @@ public class MyLinkedList<T> implements MyLinkedListInterface<T> {
     @Override
     public boolean remove(T object) {
         Node<T> node = first;
-        while (node != null && !Objects.equals(node.item, object)) {
+        while (node != null && !((node.item == object)
+                || (node.item != null && node.item.equals(object)))) {
             node = node.next;
         }
         if (node != null) {

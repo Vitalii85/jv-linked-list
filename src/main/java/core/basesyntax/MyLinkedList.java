@@ -27,7 +27,6 @@ public class MyLinkedList<T> implements MyLinkedListInterface<T> {
             add(value);
             return;
         }
-        checkIndex(index);
         Node<T> node = getNode(index);
         node.prev = new Node<>(node.prev, value, node);
         if (node == first) {
@@ -48,13 +47,11 @@ public class MyLinkedList<T> implements MyLinkedListInterface<T> {
 
     @Override
     public T get(int index) {
-        checkIndex(index);
         return getNode(index).item;
     }
 
     @Override
     public T set(T value, int index) {
-        checkIndex(index);
         Node<T> node = getNode(index);
         T oldValue = node.item;
         node.item = value;
@@ -63,7 +60,6 @@ public class MyLinkedList<T> implements MyLinkedListInterface<T> {
 
     @Override
     public T remove(int index) {
-        checkIndex(index);
         Node<T> node = getNode(index);
         deleteNode(node);
         return node.item;
@@ -99,19 +95,20 @@ public class MyLinkedList<T> implements MyLinkedListInterface<T> {
     }
 
     private Node<T> getNode(int index) {
-        Node<T> current;
+        checkIndex(index);
+        Node<T> node;
         if (index < size / 2) {
-            current = first;
+            node = first;
             for (int i = 0; i < index; i++) {
-                current = current.next;
+                node = node.next;
             }
         } else {
-            current = last;
+            node = last;
             for (int i = size - 1; i > index; i--) {
-                current = current.prev;
+                node = node.prev;
             }
         }
-        return current;
+        return node;
     }
 
     private void deleteNode(Node<T> node) {

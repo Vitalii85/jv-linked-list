@@ -29,13 +29,14 @@ public class MyLinkedList<T> implements MyLinkedListInterface<T> {
             add(value);
             return;
         }
-        Node<T> node = getNode(index);
-        node.prev = new Node<>(node.prev, value, node);
-        if (node == first) {
-            first = node.prev;
+        Node<T> successor = getNode(index);
+        Node<T> predecessor = successor.prev;
+        Node<T> newNode = new Node<>(predecessor, value, successor);
+        successor.prev = newNode;
+        if (predecessor == null) {
+            first = newNode;
         } else {
-            Node<T> prevNode = node.prev.prev;
-            prevNode.next = node.prev;
+            predecessor.next = newNode;
         }
         size++;
     }
@@ -111,23 +112,23 @@ public class MyLinkedList<T> implements MyLinkedListInterface<T> {
     }
 
     private void deleteNode(Node<T> node) {
-        if (node == first) {
-            first = node.next;
-            if (first != null) {
-                first.prev = null;
-            }
+        final Node<T> prev = node.prev;
+        final Node<T> next = node.next;
+        if (prev == null) {
+            first = next;
         } else {
-            node.prev.next = node.next;
+            prev.next = next;
         }
-        if (node == last) {
-            last = node.prev;
-            if (last != null) {
-                last.next = null;
-            }
+        if (next == null) {
+            last = prev;
         } else {
-            node.next.prev = node.prev;
+            next.prev = prev;
         }
         size--;
+    }
+
+    private boolean areEqual(T element1, T element2) {
+        return (element1 == element2) || ((element1 != null) && element1.equals(element2));
     }
 
     private static class Node<T> {

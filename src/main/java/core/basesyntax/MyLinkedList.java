@@ -111,26 +111,22 @@ public class MyLinkedList<T> implements MyLinkedListInterface<T> {
     }
 
     private void deleteNode(Node<T> node) {
-        if (node == first && node == last) {
-            first = null;
-            last = null;
-            size = 0;
-            return;
-        }
         if (node == first) {
-            node.next.prev = node.prev;
             first = node.next;
-            size--;
-            return;
+            if (first != null) {
+                first.prev = null;
+            }
+        } else {
+            node.prev.next = node.next;
         }
         if (node == last) {
-            node.prev.next = node.next;
             last = node.prev;
-            size--;
-            return;
+            if (last != null) {
+                last.next = null;
+            }
+        } else {
+            node.next.prev = node.prev;
         }
-        node.prev.next = node.next;
-        node.next.prev = node.prev;
         size--;
     }
 
